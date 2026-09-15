@@ -33,6 +33,8 @@
 
 ## Running It
 
+Tested on Windows 10/11 with Node.js v20.11.x (LTS) and Quarto CLI v1.4.550.
+
 ```powershell
 # Install toolchain
 quarto install tool tinytex
@@ -55,3 +57,6 @@ marp content.md --theme-set style.css --theme my-theme --pdf -o output/slides.pd
     remove-hr.lua   Pandoc filter that strips `---` from the Quarto PDF pass
     style.css       Marp theme override (narrower margins, custom fonts)
     output/         Generated output.pdf, slides.html, slides.pdf
+
+---
+Original course-assignment README (in Chinese, with the sample document's own instructions): [docs/course-requirements.md](docs/course-requirements.md)
