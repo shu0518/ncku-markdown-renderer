@@ -18,17 +18,12 @@
 | Lua filter (`remove-hr.lua`) to strip `---` | `---` is a horizontal rule in Quarto's PDF output but a slide-break marker in Marp. The filter deletes `HorizontalRule` nodes only in the Quarto pass, so one file drives both renderers without edits |
 | Custom Marp theme (`style.css`) | The default Marp theme clipped long paragraphs off the slide edges; narrowing the side margins fit the whitepaper-length text into a 16:9 slide |
 
-## Challenges
-
-**Problem.** The same `---` separator means different things to Quarto (thematic break) and Marp (slide break), so a single source file rendered incorrectly in at least one of the two pipelines.
-**Approach.** Wrote a Pandoc Lua filter (`remove-hr.lua`) that intercepts `HorizontalRule` AST nodes and returns an empty table, and passed it to Quarto only via `--lua-filter=remove-hr.lua`. Marp still sees the raw `---` and uses it for slide breaks.
-**Result.** One `content.md` renders into three artifacts (`output.pdf`, `slides.html`, `slides.pdf`) with no manual duplication or per-target edits.
-
 ## Limitations
 
+- No wrapper script or config file: the input filename (`content.md`) and every render flag are typed directly into each command, so rendering a different source means editing the commands by hand, not passing an argument.
 - No automated test for the render pipeline; correctness is checked by opening the three output files manually.
-- `requirements.txt` is present but empty — no Python is actually used in this project. TODO: remove it or document why it exists.
-- The Quarto command hardcodes `CJKmainfont="Microsoft JhengHei"`, a Windows-bundled font; rendering on macOS/Linux would need a different font argument.
+- `style.css` mitigates slide overflow with a fixed 22px font size and 90%-scaled tables/code, not dynamic scaling — content longer than what fits at that fixed size will still clip off the slide edges.
+- The Quarto command hardcodes `CJKmainfont="Microsoft JhengHei"`, a Windows-bundled font; rendering on macOS/Linux without that font installed will fail or silently substitute a different font.
 - `output/` is committed to the repo instead of generated on demand, so it can go stale if `content.md` changes without a re-render.
 
 ## Running It
